@@ -1,5 +1,3 @@
-from project.library import Library
-
 class User:
     def __init__(self, user_id, username):
         self.user_id = user_id
@@ -17,10 +15,18 @@ class User:
 
         for user in library.rented_books:
             if book_name in library.rented_books[user]:
-                return f"The book \"{book_name}\" is already rented and will be available in {library.rented_books[user][book]} days!"
+                return f"The book \"{book_name}\" is already rented and will be available in {library.rented_books[user][book_name]} days!"
 
     def return_book(self, author:str, book_name:str, library):
-        pass
+        if book_name in self.books:
+            library.books_available[author].append(book_name)
+            del library.rented_books[self.username][book_name]
+            self.books.remove(book_name)
+        else:
+            return f"{self.username} doesn't have this book in his/her records!"
 
     def info(self):
-        pass
+        return ", ".join(sorted(self.books))
+
+    def __str__(self):
+        return f"{self.user_id}, {self.username}, {self.books}"
